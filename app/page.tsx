@@ -81,7 +81,7 @@ const HomePage = () => {
               Connect. Share. <span className="text-indigo-600">Grow.</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8">
-              Join the world's most vibrant youth community platform where ideas
+              Join the world most vibrant youth community platform where ideas
               flourish and connections thrive.
             </p>
             <div className="flex gap-4 mb-8">
@@ -186,7 +186,7 @@ const HomePage = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Discover What's Trending
+            Discover What is Trending
           </h2>
           <div className="flex justify-center gap-4 mb-8">
             {["all", "discussions", "projects", "events"].map((tab) => (
