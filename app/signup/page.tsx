@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-const Login = () => {
+const Signup = () => {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="w-full max-w-[560px] space-y-6 p-6 lg:p-10">
@@ -14,6 +14,16 @@ const Login = () => {
           </p>
         </div>
         <form className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Name</Label>
+            <Input
+              id="name"
+              type="text"
+              placeholder="Kevin Wanyonyi"
+              required
+            />
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -26,16 +36,24 @@ const Login = () => {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
-              <Link
-                href="#"
-                className="text-sm font-medium underline"
-                prefetch={false}
-              >
-                Forgot password?
-              </Link>
             </div>
             <Input id="password" type="password" required />
           </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password_confirmation">Confirm Password</Label>
+            </div>
+            <Input id="password_confirmation" type="password" required />
+          </div>
+
+          <Link
+            href="#"
+            className="text-sm font-medium underline"
+            prefetch={false}
+          >
+            Forgot password?
+          </Link>
           <Button type="submit" className="w-full">
             Sign in
           </Button>
@@ -45,4 +63,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
