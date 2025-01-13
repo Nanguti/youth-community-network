@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Author {
   name: string;
@@ -184,10 +185,16 @@ const ForumPage: React.FC = () => {
             <h1 className="text-2xl font-bold text-gray-900">
               Community Forums
             </h1>
-            <Button className="bg-pink-600 hover:bg-pink-700">
-              <PlusCircle className="h-4 w-4 mr-2" />
-              New Discussion
-            </Button>
+            <Link
+              href="/forum/create"
+              className="text-sm font-medium text-indigo-600
+             hover:text-indigo-500"
+            >
+              <Button className="bg-pink-600 hover:bg-pink-700">
+                <PlusCircle className="h-4 w-4 mr-2" />
+                New Discussion
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

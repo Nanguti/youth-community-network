@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 
 const PollsSurveyPage = () => {
   const [activePoll, setActivePoll] = useState(0);
@@ -51,9 +52,11 @@ const PollsSurveyPage = () => {
             Participate in community polls and see real-time results
           </p>
         </div>
-        <Button className="flex items-center gap-2">
-          <Plus className="h-4 w-4" /> Create New Poll
-        </Button>
+        <Link href="/polls-survey/create" className="flex items-center gap-2">
+          <Button className="flex items-center gap-2">
+            <Plus className="h-4 w-4" /> Create New Poll
+          </Button>
+        </Link>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
