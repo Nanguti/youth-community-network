@@ -136,7 +136,9 @@ const AboutUs = () => {
           {testimonials.map((testimonial, index) => (
             <Card key={index}>
               <CardContent className="p-6">
-                <p className="text-lg mb-4 italic">"{testimonial.text}"</p>
+                <p className="text-lg mb-4 italic">
+                  &quot;{testimonial.text}&quot;
+                </p>{" "}
                 <div>
                   <p className="font-bold">{testimonial.author}</p>
                   <p className="text-gray-600">

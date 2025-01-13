@@ -4,27 +4,22 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import {
   MessageCircle,
   Users,
-  Award,
   Globe,
-  TrendingUp,
   ChevronRight,
   Star,
   ArrowRight,
-  Github,
-  Twitter,
-  Instagram,
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+// import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const HomePage = () => {
   const [activeUsers] = useState(1234);
-  const [activePosts] = useState(856);
+  // const [activePosts] = useState(856);
   const [activeTab, setActiveTab] = useState("all");
   const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  // const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   const testimonials = [
     {
