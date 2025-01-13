@@ -1,26 +1,21 @@
 "use client";
 import React, { useState } from "react";
-import {
-  X,
-  TrendingUp,
-  Hash,
-  Users,
-  BookmarkPlus,
-  BarChart2,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { TrendingUp, Hash, Users, BookmarkPlus, BarChart2 } from "lucide-react";
 
 interface Category {
   id: string;
   name: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }
+
+// Interface for the props of the NewDiscussionForm component
 interface NewDiscussionFormProps {
   onSubmit: (discussion: NewDiscussion) => void;
   onClose: () => void;
   categories: Category[];
 }
 
+// Interface representing the discussion form's data structure
 interface NewDiscussion {
   title: string;
   content: string;
@@ -28,6 +23,7 @@ interface NewDiscussion {
   tags: string[];
 }
 
+// Functional component for creating a new discussion
 const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
   onSubmit,
   onClose,
@@ -45,7 +41,7 @@ const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
     { id: "education", name: "Education", icon: BookmarkPlus },
     { id: "climate", name: "Climate Action", icon: TrendingUp },
   ];
-
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const newDiscussion: NewDiscussion = {
@@ -57,6 +53,7 @@ const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
     onSubmit(newDiscussion);
   };
 
+  // Handle adding tags when Enter is pressed
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInput.trim() !== "") {
       e.preventDefault();
@@ -67,6 +64,7 @@ const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
     }
   };
 
+  // Handle removing a tag
   const removeTag = (tagToRemove: string) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
@@ -82,7 +80,20 @@ const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
             onClick={onClose}
             className="text-gray-400 hover:text-gray-500"
           >
-            <X className="h-5 w-5" />
+            <svg
+              className="h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
         </div>
 
@@ -100,8 +111,8 @@ const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none
-                 focus:ring-2 focus:ring-pink-500"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none 
+                focus:ring-2 focus:ring-pink-500"
                 placeholder="Enter a descriptive title"
                 required
               />
@@ -143,8 +154,8 @@ const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 rows={6}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none
-                 focus:ring-2 focus:ring-pink-500"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none 
+                focus:ring-2 focus:ring-pink-500"
                 placeholder="Share your thoughts..."
                 required
               />
@@ -169,7 +180,20 @@ const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
                       onClick={() => removeTag(tag)}
                       className="ml-2 text-gray-500 hover:text-gray-700"
                     >
-                      <X className="h-3 w-3" />
+                      <svg
+                        className="h-3 w-3"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
                     </button>
                   </span>
                 ))}
@@ -180,20 +204,27 @@ const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={handleAddTag}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none
-                 focus:ring-2 focus:ring-pink-500"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none 
+                focus:ring-2 focus:ring-pink-500"
                 placeholder="Type a tag and press Enter"
               />
             </div>
           </div>
 
           <div className="flex items-center gap-4 pt-4 border-t">
-            <Button type="button" variant="outline" onClick={onClose}>
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-100"
+            >
               Cancel
-            </Button>
-            <Button type="submit" className="bg-pink-600 hover:bg-pink-700">
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+            >
               Post Discussion
-            </Button>
+            </button>
           </div>
         </form>
       </div>
