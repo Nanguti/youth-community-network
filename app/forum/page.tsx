@@ -5,7 +5,6 @@ import {
   Search,
   MessageCircle,
   TrendingUp,
-  Clock,
   Hash,
   Users,
   Filter,
@@ -14,14 +13,72 @@ import {
   ThumbsUp,
   Share2,
   BarChart2,
+  SortAsc,
+  Eye,
+  Send,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
-const ForumPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+interface Author {
+  name: string;
+  image: string;
+}
 
-  const categories = [
+interface Stats {
+  replies: number;
+  views: number;
+  likes: number;
+}
+
+interface Discussion {
+  id: number;
+  title: string;
+  preview: string;
+  category: string;
+  author: Author;
+  stats: Stats;
+  tags: string[];
+  timeAgo: string;
+  isHot: boolean;
+}
+
+interface Comment {
+  id: number;
+  author: string;
+  avatar: string;
+  content: string;
+  timeAgo: string;
+  likes: number;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+}
+const ForumPage: React.FC = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [activeCommentId, setActiveCommentId] = useState<number | null>(null);
+
+  const [comments, setComments] = useState<Record<number, Comment[]>>({
+    1: [
+      {
+        id: 1,
+        author: "Jane Smith",
+        avatar: "https://github.com/shadcn.png",
+        content: "This is a fascinating perspective on renewable energy!",
+        timeAgo: "1h ago",
+        likes: 12,
+      },
+    ],
+    2: [],
+    3: [],
+  });
+  const [newComment, setNewComment] = useState<string>("");
+
+  const categories: Category[] = [
     { id: "all", name: "All Topics", icon: Hash },
     { id: "technology", name: "Technology", icon: BarChart2 },
     { id: "health", name: "Health & Wellness", icon: Users },
@@ -29,12 +86,12 @@ const ForumPage = () => {
     { id: "climate", name: "Climate Action", icon: TrendingUp },
   ];
 
-  const discussions = [
+  const discussions: Discussion[] = [
     {
       id: 1,
       title: "The Future of Renewable Energy in Urban Areas",
       preview:
-        "Let's discuss innovative solutions for implementing renewable energy in cities...",
+        "Let's discuss innovative solutions for implementing renewable energy in cities. From solar panels on skyscrapers to wind turbines integrated into architecture...",
       category: "technology",
       author: {
         name: "Alex Chen",
@@ -49,8 +106,74 @@ const ForumPage = () => {
       timeAgo: "2h ago",
       isHot: true,
     },
-    // Add more discussion items as needed
+    {
+      id: 2,
+      title: "Mental Health in the Digital Age",
+      preview:
+        "How can we maintain healthy digital habits while staying connected? Share your experiences and strategies for digital wellness...",
+      category: "health",
+      author: {
+        name: "Sarah Johnson",
+        image: "https://github.com/shadcn.png",
+      },
+      stats: {
+        replies: 72,
+        views: 2100,
+        likes: 154,
+      },
+      tags: ["mentalhealth", "wellness", "digital"],
+      timeAgo: "4h ago",
+      isHot: true,
+    },
+    {
+      id: 3,
+      title: "Online Learning: Best Practices for Educators",
+      preview:
+        "Exploring effective methods for engaging students in virtual classrooms. What tools and techniques have worked best for you?",
+      category: "education",
+      author: {
+        name: "Prof. Michael Brown",
+        image: "https://github.com/shadcn.png",
+      },
+      stats: {
+        replies: 38,
+        views: 890,
+        likes: 67,
+      },
+      tags: ["education", "online", "teaching"],
+      timeAgo: "6h ago",
+      isHot: false,
+    },
   ];
+
+  const filteredDiscussions = discussions.filter((discussion) => {
+    const matchesCategory =
+      selectedCategory === "all" || discussion.category === selectedCategory;
+    const matchesSearch =
+      searchQuery === "" ||
+      discussion.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      discussion.preview.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const handleAddComment = (discussionId: number) => {
+    if (newComment.trim()) {
+      const newCommentObj = {
+        id: comments[discussionId].length + 1,
+        author: "Current User",
+        avatar: "https://github.com/shadcn.png",
+        content: newComment,
+        timeAgo: "Just now",
+        likes: 0,
+      };
+
+      setComments((prev) => ({
+        ...prev,
+        [discussionId]: [...prev[discussionId], newCommentObj],
+      }));
+      setNewComment("");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -61,7 +184,7 @@ const ForumPage = () => {
             <h1 className="text-2xl font-bold text-gray-900">
               Community Forums
             </h1>
-            <Button className="bg-indigo-600 hover:bg-indigo-700">
+            <Button className="bg-pink-600 hover:bg-pink-700">
               <PlusCircle className="h-4 w-4 mr-2" />
               New Discussion
             </Button>
@@ -71,28 +194,49 @@ const ForumPage = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-12 gap-8">
-          {/* Left Sidebar */}
+          {/* Left Sidebar - Now Sticky */}
           <div className="col-span-12 lg:col-span-3">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <div className="space-y-1">
-                {categories.map((category) => {
-                  const Icon = category.icon;
-                  return (
-                    <button
-                      key={category.id}
-                      onClick={() => setSelectedCategory(category.id)}
-                      className={`w-full flex items-center px-4 py-2 text-sm rounded-lg
-                         transition-colors ${
-                           selectedCategory === category.id
-                             ? "bg-indigo-50 text-indigo-600"
-                             : "text-gray-600 hover:bg-gray-50"
-                         }`}
-                    >
-                      <Icon className="h-4 w-4 mr-3" />
-                      {category.name}
-                    </button>
-                  );
-                })}
+            <div className="sticky top-8 space-y-6">
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-lg font-semibold mb-4">Categories</h2>
+                <div className="space-y-1">
+                  {categories.map((category) => {
+                    const Icon = category.icon;
+                    return (
+                      <button
+                        key={category.id}
+                        onClick={() => setSelectedCategory(category.id)}
+                        className={`w-full flex items-center px-4 py-2 text-sm rounded-lg
+                           transition-colors ${
+                             selectedCategory === category.id
+                               ? "bg-indigo-50 text-indigo-600"
+                               : "text-gray-600 hover:bg-gray-50"
+                           }`}
+                      >
+                        <Icon className="h-4 w-4 mr-3" />
+                        {category.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-lg font-semibold mb-4">Forum Stats</h2>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">Total Discussions</span>
+                    <span className="font-semibold">1,234</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">Active Users</span>
+                    <span className="font-semibold">456</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">Total Members</span>
+                    <span className="font-semibold">10.5k</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -106,6 +250,8 @@ const ForumPage = () => {
                   <input
                     type="text"
                     placeholder="Search discussions..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-10 pr-4 py-2 border rounded-lg 
                     focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
@@ -115,12 +261,16 @@ const ForumPage = () => {
                   <Filter className="h-4 w-4 mr-2" />
                   Filter
                 </Button>
+                <Button variant="outline" className="flex items-center">
+                  <SortAsc className="h-4 w-4 mr-2" />
+                  Sort
+                </Button>
               </div>
             </div>
 
             {/* Discussion List */}
             <div className="space-y-4">
-              {discussions.map((discussion) => (
+              {filteredDiscussions.map((discussion) => (
                 <motion.div
                   key={discussion.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -135,7 +285,7 @@ const ForumPage = () => {
                           alt={discussion.author.name}
                           width={32}
                           height={32}
-                          className="w-8 h-8 rounded-full"
+                          className="rounded-full bg-gray-200"
                         />
                         <span className="text-sm text-gray-600">
                           {discussion.author.name} · {discussion.timeAgo}
@@ -165,10 +315,19 @@ const ForumPage = () => {
 
                   <div className="flex items-center justify-between pt-4 border-t">
                     <div className="flex items-center gap-6">
-                      <button className="flex items-center text-gray-500 hover:text-indigo-600">
+                      <button
+                        className="flex items-center text-gray-500 hover:text-indigo-600"
+                        onClick={() =>
+                          setActiveCommentId(
+                            activeCommentId === discussion.id
+                              ? null
+                              : discussion.id
+                          )
+                        }
+                      >
                         <MessageCircle className="h-4 w-4 mr-1" />
                         <span className="text-sm">
-                          {discussion.stats.replies}
+                          {comments[discussion.id].length}
                         </span>
                       </button>
                       <button className="flex items-center text-gray-500 hover:text-indigo-600">
@@ -178,7 +337,7 @@ const ForumPage = () => {
                         </span>
                       </button>
                       <span className="flex items-center text-gray-500">
-                        <Clock className="h-4 w-4 mr-1" />
+                        <Eye className="h-4 w-4 mr-1" />
                         <span className="text-sm">
                           {discussion.stats.views} views
                         </span>
@@ -193,6 +352,78 @@ const ForumPage = () => {
                       </Button>
                     </div>
                   </div>
+
+                  {/* Comments Section */}
+                  {activeCommentId === discussion.id && (
+                    <div className="mt-4 pt-4 border-t">
+                      <h4 className="text-lg font-semibold mb-4">Comments</h4>
+                      <div className="space-y-4">
+                        {comments[discussion.id].map((comment) => (
+                          <div key={comment.id} className="flex space-x-3">
+                            <Image
+                              src={comment.avatar}
+                              alt={comment.author}
+                              width={32}
+                              height={32}
+                              className="rounded-full bg-gray-200"
+                            />
+                            <div className="flex-1">
+                              <div className="bg-gray-50 rounded-lg p-3">
+                                <div className="flex items-center justify-between">
+                                  <span className="font-medium">
+                                    {comment.author}
+                                  </span>
+                                  <span className="text-sm text-gray-500">
+                                    {comment.timeAgo}
+                                  </span>
+                                </div>
+                                <p className="text-gray-600 mt-1">
+                                  {comment.content}
+                                </p>
+                              </div>
+                              <div className="flex items-center mt-2 space-x-2">
+                                <button className="text-sm text-gray-500 hover:text-indigo-600">
+                                  <ThumbsUp className="h-4 w-4 inline mr-1" />
+                                  {comment.likes}
+                                </button>
+                                <button className="text-sm text-gray-500 hover:text-indigo-600">
+                                  Reply
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Add Comment */}
+                      <div className="mt-4 flex items-start space-x-3">
+                        <Image
+                          src="https://github.com/shadcn.png"
+                          alt="Current user"
+                          width={32}
+                          height={32}
+                          className="rounded-full bg-gray-200"
+                        />
+                        <div className="flex-1">
+                          <div className="relative">
+                            <textarea
+                              value={newComment}
+                              onChange={(e) => setNewComment(e.target.value)}
+                              placeholder="Add a comment..."
+                              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                              rows={3}
+                            />
+                            <Button
+                              onClick={() => handleAddComment(discussion.id)}
+                              className="absolute bottom-2 right-2"
+                            >
+                              <Send className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </motion.div>
               ))}
             </div>
