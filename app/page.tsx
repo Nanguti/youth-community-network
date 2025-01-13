@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   MessageCircle,
   Users,
@@ -18,7 +18,7 @@ const HomePage = () => {
   const [activeUsers] = useState(1234);
   // const [activePosts] = useState(856);
   const [activeTab, setActiveTab] = useState("all");
-  const { scrollYProgress } = useScroll();
+  // const { scrollYProgress } = useScroll();
   // const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   const testimonials = [
