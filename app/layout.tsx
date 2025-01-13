@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${fontSans.variable} font-sans pt-[64px]`}>
+      <body className={`${fontSans.variable} font-sans pt-[83px]`}>
         <Navbar />
         {children}
         <Footer />
