@@ -8,7 +8,6 @@ import {
   Clock,
   Hash,
   Users,
-  ChevronRight,
   Filter,
   PlusCircle,
   BookmarkPlus,

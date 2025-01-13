@@ -1,21 +1,6 @@
 import React from "react";
-import {
-  MessageCircle,
-  Users,
-  Award,
-  Globe,
-  TrendingUp,
-  ChevronRight,
-  Star,
-  ArrowRight,
-  Github,
-  Twitter,
-  Instagram,
-} from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Github, Twitter, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Footer = () => {
   return (

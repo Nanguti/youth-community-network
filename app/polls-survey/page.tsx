@@ -4,17 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   PieChart,
-  BarChart,
-  Bar,
   Pie,
   Cell,
-  XAxis,
-  YAxis,
   Tooltip,
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { Plus, ChevronDown } from "lucide-react";
+import { Plus } from "lucide-react";
 
 const PollsSurveyPage = () => {
   const [activePoll, setActivePoll] = useState(0);

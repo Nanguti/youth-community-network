@@ -2,16 +2,12 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  ThumbsUp,
-  ThumbsDown,
-  MessageCircle,
   Share2,
   Flag,
   MoreVertical,
   ChevronUp,
   ChevronDown,
   Reply,
-  Clock,
   Bookmark,
   Smile,
 } from "lucide-react";

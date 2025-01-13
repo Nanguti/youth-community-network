@@ -1,14 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import { Menu, X } from "lucide-react";
+import React from "react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
   const navLinks = [
     { title: "Home", href: "/" },
     { title: "About", href: "/about-us" },
@@ -57,7 +55,6 @@ const Navbar = () => {
                     key={link.title}
                     href={link.href}
                     className="text-gray-700 hover:text-gray-900 transition-colors"
-                    onClick={() => setIsOpen(false)}
                   >
                     {link.title}
                   </Link>

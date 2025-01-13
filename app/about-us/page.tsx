@@ -61,7 +61,7 @@ const AboutUs = () => {
           Building the Future of Community
         </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          We're on a mission to create the most engaging and supportive
+          We are on a mission to create the most engaging and supportive
           community platform for developers and tech enthusiasts.
         </p>
       </div>
@@ -153,7 +153,7 @@ const AboutUs = () => {
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-4">Get in Touch</h2>
         <p className="text-gray-600 mb-6">
-          Have questions? We'd love to hear from you.
+          Have questions? We would love to hear from you.
         </p>
         <div className="flex justify-center gap-4">
           <Button>

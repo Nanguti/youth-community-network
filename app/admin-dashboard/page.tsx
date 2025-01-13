@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 
 const AdminDashboard = () => {
-  const [selectedTab, setSelectedTab] = useState("overview");
+  // const [selectedTab, setSelectedTab] = useState("overview");
 
   const activityData = [
     { date: "2024-01-01", users: 120, posts: 45, comments: 89 },
