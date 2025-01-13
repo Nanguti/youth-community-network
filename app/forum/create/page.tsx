@@ -8,13 +8,6 @@ interface Category {
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }
 
-// Interface for the props of the NewDiscussionForm component
-interface NewDiscussionFormProps {
-  onSubmit: (discussion: NewDiscussion) => void;
-  onClose: () => void;
-  categories: Category[];
-}
-
 // Interface representing the discussion form's data structure
 interface NewDiscussion {
   title: string;
@@ -23,11 +16,8 @@ interface NewDiscussion {
   tags: string[];
 }
 
-// Functional component for creating a new discussion
-const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
-  onSubmit,
-  onClose,
-}) => {
+// Page component for creating a new discussion
+export default function CreateDiscussionPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
@@ -41,8 +31,9 @@ const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
     { id: "education", name: "Education", icon: BookmarkPlus },
     { id: "climate", name: "Climate Action", icon: TrendingUp },
   ];
+
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newDiscussion: NewDiscussion = {
       title,
@@ -50,7 +41,9 @@ const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
       category,
       tags,
     };
-    onSubmit(newDiscussion);
+
+    // TODO: Implement your submission logic here
+    console.log(newDiscussion);
   };
 
   // Handle adding tags when Enter is pressed
@@ -70,31 +63,12 @@ const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
   };
 
   return (
-    <div className="relative inset-0 bg-black bg-opacity-5 flex items-center justify-center pt-4 pb-32">
+    <div className="relative bg-black bg-opacity-5 flex items-center justify-center pt-4 pb-32">
       <div className="bg-white rounded-lg w-full max-w-3xl">
         <div className="flex items-center justify-between p-6 border-b">
           <h2 className="text-xl font-semibold text-gray-900">
             Create New Discussion
           </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-500"
-          >
-            <svg
-              className="h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
@@ -213,13 +187,6 @@ const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
 
           <div className="flex items-center gap-4 pt-4 border-t">
             <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-100"
-            >
-              Cancel
-            </button>
-            <button
               type="submit"
               className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
             >
@@ -230,6 +197,4 @@ const NewDiscussionForm: React.FC<NewDiscussionFormProps> = ({
       </div>
     </div>
   );
-};
-
-export default NewDiscussionForm;
+}
