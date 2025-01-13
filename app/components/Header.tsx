@@ -5,6 +5,7 @@ import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
+import Image from "next/image";
 
 const Navbar = () => {
   const navLinks = [
@@ -13,15 +14,16 @@ const Navbar = () => {
     { title: "Forum", href: "/forum" },
     { title: "Polls & Survey", href: "/polls-survey" },
     { title: "Lead Board", href: "/leadboard" },
+    { title: "Contact Us", href: "/contact-us" },
   ];
 
   return (
-    <nav className="w-full bg-white border-b border-gray-200 px-4 py-2.5">
+    <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 px-4 py-2.5">
       <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <span className="self-center text-xl font-semibold whitespace-nowrap">
-            Your Logo
+            <Image src="/typni.jpg" alt="typni Logo" width={180} height={60} />
           </span>
         </Link>
 

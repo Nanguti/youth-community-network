@@ -9,7 +9,7 @@ const AboutUs = () => {
       name: "Sarah Johnson",
       role: "Founder & CEO",
       bio: "10+ years experience in community building",
-      avatar: "/api/placeholder/96/96",
+      avatar: "https://github.com/shadcn.png",
       social: {
         twitter: "#",
         linkedin: "#",
@@ -20,7 +20,7 @@ const AboutUs = () => {
       name: "Michael Chen",
       role: "Lead Developer",
       bio: "Full-stack developer with expertise in React",
-      avatar: "/api/placeholder/96/96",
+      avatar: "https://github.com/shadcn.png",
       social: {
         twitter: "#",
         linkedin: "#",
@@ -31,7 +31,7 @@ const AboutUs = () => {
       name: "Elena Rodriguez",
       role: "Community Manager",
       bio: "Passionate about building inclusive communities",
-      avatar: "/api/placeholder/96/96",
+      avatar: "https://github.com/shadcn.png",
       social: {
         twitter: "#",
         linkedin: "#",
@@ -100,6 +100,8 @@ const AboutUs = () => {
                 <Image
                   src={member.avatar}
                   alt={member.name}
+                  width={24}
+                  height={24}
                   className="w-24 h-24 rounded-full mx-auto mb-4"
                 />
                 <h3 className="text-xl font-bold mb-1">{member.name}</h3>
@@ -153,7 +155,7 @@ const AboutUs = () => {
       </div>
 
       {/* Contact Section */}
-      <div className="text-center">
+      <div className="text-center pt-16 pb-32">
         <h2 className="text-3xl font-bold mb-4">Get in Touch</h2>
         <p className="text-gray-600 mb-6">
           Have questions? We would love to hear from you.

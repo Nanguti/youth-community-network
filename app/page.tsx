@@ -63,7 +63,7 @@ const HomePage = () => {
           mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"
           />
           <div
-            className="absolute top-40 left-40 w-80 h-80 bg-pink-300 rounded-full 
+            className="absolute top-40 left-40 w-80 h-80 bg-pink-400 rounded-full 
           mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"
           />
         </div>
@@ -78,14 +78,14 @@ const HomePage = () => {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              Connect. Share. <span className="text-indigo-600">Grow.</span>
+              Connect. Share. <span className="text-pink-600">Grow.</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8">
               Join the world most vibrant youth community platform where ideas
               flourish and connections thrive.
             </p>
             <div className="flex gap-4 mb-8">
-              <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700">
+              <Button size="lg" className="bg-pink-600 hover:bg-pink-700">
                 Join Now
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
@@ -194,7 +194,7 @@ const HomePage = () => {
                 key={tab}
                 variant={activeTab === tab ? "default" : "outline"}
                 onClick={() => setActiveTab(tab)}
-                className={activeTab === tab ? "bg-indigo-600" : ""}
+                className={activeTab === tab ? "bg-pink-600" : ""}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
               </Button>
@@ -253,7 +253,7 @@ const HomePage = () => {
       </div>
 
       {/* Testimonials Section */}
-      <div className="bg-gradient-to-b from-white to-indigo-50 py-16">
+      <div className="bg-gradient-to-b from-white to-indigo-50 pt-16 pb-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0 }}

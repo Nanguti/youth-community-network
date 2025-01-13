@@ -34,7 +34,7 @@ const ContactUs: React.FC = () => {
         <p className="text-gray-600">We would love to hear from you</p>
       </div>
 
-      <Tabs defaultValue="contact" className="space-y-4">
+      <Tabs defaultValue="contact" className="space-y-4 mb-32">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="contact" className="flex items-center gap-2">
             <MessageSquare className="h-4 w-4" /> Contact

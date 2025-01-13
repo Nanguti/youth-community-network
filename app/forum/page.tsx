@@ -38,7 +38,7 @@ const ForumPage = () => {
       category: "technology",
       author: {
         name: "Alex Chen",
-        image: "/api/placeholder/32/32",
+        image: "https://github.com/shadcn.png",
       },
       stats: {
         replies: 45,
@@ -81,11 +81,12 @@ const ForumPage = () => {
                     <button
                       key={category.id}
                       onClick={() => setSelectedCategory(category.id)}
-                      className={`w-full flex items-center px-4 py-2 text-sm rounded-lg transition-colors ${
-                        selectedCategory === category.id
-                          ? "bg-indigo-50 text-indigo-600"
-                          : "text-gray-600 hover:bg-gray-50"
-                      }`}
+                      className={`w-full flex items-center px-4 py-2 text-sm rounded-lg
+                         transition-colors ${
+                           selectedCategory === category.id
+                             ? "bg-indigo-50 text-indigo-600"
+                             : "text-gray-600 hover:bg-gray-50"
+                         }`}
                     >
                       <Icon className="h-4 w-4 mr-3" />
                       {category.name}
@@ -105,7 +106,8 @@ const ForumPage = () => {
                   <input
                     type="text"
                     placeholder="Search discussions..."
-                    className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full pl-10 pr-4 py-2 border rounded-lg 
+                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                   <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                 </div>
@@ -131,6 +133,8 @@ const ForumPage = () => {
                         <Image
                           src={discussion.author.image}
                           alt={discussion.author.name}
+                          width={32}
+                          height={32}
                           className="w-8 h-8 rounded-full"
                         />
                         <span className="text-sm text-gray-600">

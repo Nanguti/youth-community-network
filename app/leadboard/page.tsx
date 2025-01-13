@@ -31,21 +31,21 @@ const Leaderboard: React.FC = () => {
         name: "Sarah Chen",
         points: 2840,
         badges: ["Top Contributor", "Question Master"],
-        avatar: "/api/placeholder/32/32",
+        avatar: "https://github.com/shadcn.png",
       },
       {
         rank: 2,
         name: "John Doe",
         points: 2560,
         badges: ["Helpful Hero"],
-        avatar: "/api/placeholder/32/32",
+        avatar: "https://github.com/shadcn.png",
       },
       {
         rank: 3,
         name: "Maria Garcia",
         points: 2340,
         badges: ["Rising Star"],
-        avatar: "/api/placeholder/32/32",
+        avatar: "https://github.com/shadcn.png",
       },
     ],
     monthly: [
@@ -54,21 +54,21 @@ const Leaderboard: React.FC = () => {
         name: "Alex Kim",
         points: 8920,
         badges: ["Monthly Champion"],
-        avatar: "/api/placeholder/32/32",
+        avatar: "https://github.com/shadcn.png",
       },
       {
         rank: 2,
         name: "Sarah Chen",
         points: 8750,
         badges: ["Top Contributor"],
-        avatar: "/api/placeholder/32/32",
+        avatar: "https://github.com/shadcn.png",
       },
       {
         rank: 3,
         name: "Chris Evans",
         points: 8400,
         badges: ["Consistent Contributor"],
-        avatar: "/api/placeholder/32/32",
+        avatar: "https://github.com/shadcn.png",
       },
     ],
   };
@@ -101,7 +101,7 @@ const Leaderboard: React.FC = () => {
         </Button>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-4 pb-32">
         {leaderboardData[timeFilter].map((user) => (
           <Card
             key={user.rank}
@@ -117,6 +117,8 @@ const Leaderboard: React.FC = () => {
               <Image
                 src={user.avatar}
                 alt={user.name}
+                width={48}
+                height={48}
                 className="w-12 h-12 rounded-full"
               />
 

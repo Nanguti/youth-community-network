@@ -3,15 +3,16 @@ import { Github, Twitter, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Footer = () => {
+  const date = new Date().getFullYear();
   return (
     <div>
       {" "}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-pink-700 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <h3 className="text-xl font-bold mb-4">Youth Platform</h3>
-              <p className="text-gray-400">
+              <p className="text-white">
                 Empowering young voices to create positive change globally.
               </p>
             </div>
@@ -21,7 +22,7 @@ const Footer = () => {
                 <li>
                   <Button
                     variant="link"
-                    className="text-gray-400 hover:text-white p-0"
+                    className="text-white hover:text-white p-0"
                   >
                     About Us
                   </Button>
@@ -29,7 +30,7 @@ const Footer = () => {
                 <li>
                   <Button
                     variant="link"
-                    className="text-gray-400 hover:text-white p-0"
+                    className="text-white hover:text-white p-0"
                   >
                     Community Guidelines
                   </Button>
@@ -37,7 +38,7 @@ const Footer = () => {
                 <li>
                   <Button
                     variant="link"
-                    className="text-gray-400 hover:text-white p-0"
+                    className="text-white hover:text-white p-0"
                   >
                     Success Stories
                   </Button>
@@ -50,7 +51,7 @@ const Footer = () => {
                 <li>
                   <Button
                     variant="link"
-                    className="text-gray-400 hover:text-white p-0"
+                    className="text-white hover:text-white p-0"
                   >
                     Help Center
                   </Button>
@@ -58,7 +59,7 @@ const Footer = () => {
                 <li>
                   <Button
                     variant="link"
-                    className="text-gray-400 hover:text-white p-0"
+                    className="text-white hover:text-white p-0"
                   >
                     Events Calendar
                   </Button>
@@ -66,7 +67,7 @@ const Footer = () => {
                 <li>
                   <Button
                     variant="link"
-                    className="text-gray-400 hover:text-white p-0"
+                    className="text-white hover:text-white p-0"
                   >
                     Blog
                   </Button>
@@ -79,29 +80,29 @@ const Footer = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-gray-400 hover:text-white"
+                  className="text-white hover:text-white"
                 >
                   <Twitter className="h-5 w-5" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-gray-400 hover:text-white"
+                  className="text-white hover:text-white"
                 >
                   <Instagram className="h-5 w-5" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-gray-400 hover:text-white"
+                  className="text-white hover:text-white"
                 >
                   <Github className="h-5 w-5" />
                 </Button>
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Youth Platform. All rights reserved.</p>
+          <div className="border-t border-white mt-8 pt-8 text-center text-white">
+            <p>&copy; {date} Youth Platform. All rights reserved.</p>
           </div>
         </div>
       </footer>
