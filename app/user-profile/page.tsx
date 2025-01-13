@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Edit, MessageSquare, Award, Activity } from "lucide-react";
+import Image from "next/image";
 
 const UserProfile = () => {
   // const [activeTab, setActiveTab] = useState("posts");
@@ -46,7 +47,7 @@ const UserProfile = () => {
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-8 items-start">
             <div className="relative group">
-              <img
+              <Image
                 src={userData.avatar}
                 alt={userData.name}
                 className="w-32 h-32 rounded-full"

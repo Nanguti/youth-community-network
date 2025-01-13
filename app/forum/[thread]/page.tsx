@@ -12,6 +12,7 @@ import {
   Smile,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const DiscussionThread = () => {
   const [replyContent, setReplyContent] = useState("");
@@ -94,7 +95,7 @@ What are your experiences with renewable energy initiatives in your cities?`,
           className="bg-white rounded-lg shadow-sm p-6 mb-8"
         >
           <div className="flex items-start gap-4">
-            <img
+            <Image
               src={threadData.author.image}
               alt={threadData.author.name}
               className="w-10 h-10 rounded-full"
@@ -242,7 +243,7 @@ What are your experiences with renewable energy initiatives in your cities?`,
                 className="border-b last:border-0 pb-6 last:pb-0"
               >
                 <div className="flex items-start gap-4">
-                  <img
+                  <Image
                     src={reply.author.image}
                     alt={reply.author.name}
                     className="w-10 h-10 rounded-full"

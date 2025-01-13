@@ -16,6 +16,7 @@ import {
   BarChart2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const ForumPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -127,7 +128,7 @@ const ForumPage = () => {
                   <div className="flex items-start justify-between">
                     <div className="flex-grow">
                       <div className="flex items-center gap-3 mb-2">
-                        <img
+                        <Image
                           src={discussion.author.image}
                           alt={discussion.author.name}
                           className="w-8 h-8 rounded-full"

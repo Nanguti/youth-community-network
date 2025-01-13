@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
+import Image from "next/image";
 
 const AboutUs = () => {
   const teamMembers = [
@@ -96,7 +97,7 @@ const AboutUs = () => {
           {teamMembers.map((member) => (
             <Card key={member.name}>
               <CardContent className="p-6 text-center">
-                <img
+                <Image
                   src={member.avatar}
                   alt={member.name}
                   className="w-24 h-24 rounded-full mx-auto mb-4"

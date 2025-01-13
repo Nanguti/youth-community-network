@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Medal, Star } from "lucide-react";
+import Image from "next/image";
 
 interface User {
   rank: number;
@@ -113,7 +114,7 @@ const Leaderboard: React.FC = () => {
                 )}
               </div>
 
-              <img
+              <Image
                 src={user.avatar}
                 alt={user.name}
                 className="w-12 h-12 rounded-full"

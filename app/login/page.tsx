@@ -7,12 +7,13 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const LoginPage = () => {
   return (
     <div className="grid min-h-screen w-full grid-cols-1 lg:grid-cols-2">
       <div className="hidden bg-gray-100 lg:block dark:bg-gray-800">
-        <img
+        <Image
           src="/placeholder.svg"
           alt="Login Illustration"
           width={1920}
