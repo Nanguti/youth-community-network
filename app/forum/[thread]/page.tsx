@@ -33,29 +33,13 @@ const DiscussionThread = () => {
       try {
         const response = await getThread(Number(threadId));
         setThread(response.data);
-      } catch (error) {}
+      } catch (error) {
+        throw error;
+      }
     };
     fetchThread();
   }, [threadId]);
 
-  const replies = [
-    {
-      id: 1,
-      content:
-        "Great points about solar panel integration! In our city, we've implemented a program that incentivizes building owners to install solar panels on rooftops. The results have been promising so far.",
-      author: {
-        name: "Sarah Johnson",
-        image: "https://github.com/shadcn.png",
-        role: "Urban Planner",
-      },
-      stats: {
-        upvotes: 89,
-        downvotes: 3,
-      },
-      timePosted: "1 hour ago",
-      isVerified: true,
-    },
-  ];
   console.log(thread?.replies);
 
   const handleSubmitReply = async (e: React.FormEvent) => {
