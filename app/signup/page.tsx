@@ -8,7 +8,7 @@ import { User } from "@/types/User";
 import axiosClient from "@/lib/axiosClient";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 const Signup = () => {
   const router = useRouter();
