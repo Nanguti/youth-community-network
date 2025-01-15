@@ -70,3 +70,10 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Customize the toast container */
+.__react-toastify__toast {
+  font-size: 1.5rem;
+  padding: 20px;
+  line-height: 1.5;
+}

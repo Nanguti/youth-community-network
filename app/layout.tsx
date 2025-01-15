@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -22,8 +23,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${fontSans.variable} font-sans pt-[83px]`}>
+      <body className={`${fontSans.variable} font-sans pt-[80px]`}>
         <Navbar />
+        <Toaster position="top-right" />
         {children}
         <Footer />
       </body>

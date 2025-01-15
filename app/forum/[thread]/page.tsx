@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Share2,
@@ -13,36 +13,30 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useParams } from "next/navigation";
+import { getThread, replyOnThread } from "@/hooks/useForum";
+import { Thread } from "@/types/Thread";
+import { toast } from "react-hot-toast";
+import { formatDistanceToNow } from "date-fns";
 
 const DiscussionThread = () => {
+  const { thread: threadId } = useParams();
   const [replyContent, setReplyContent] = useState("");
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [sortBy, setSortBy] = useState("top");
+  const [thread, setThread] = useState<Thread | null>(null);
 
-  const threadData = {
-    id: 1,
-    title: "The Future of Renewable Energy in Urban Areas",
-    content: `I've been researching innovative solutions for implementing renewable energy in cities, and I'd love to hear your thoughts on this topic.
+  const defaultAvatar = "/avatar.jpg"; // Define a default avatar path
 
-Some key points I'd like to discuss:
-1. Solar panel integration in existing architecture
-2. Community-based energy sharing systems
-3. The role of smart grids in urban energy management
-
-What are your experiences with renewable energy initiatives in your cities?`,
-    author: {
-      name: "Alex Chen",
-      image: "/api/placeholder/40/40",
-      role: "Environmental Specialist",
-    },
-    stats: {
-      upvotes: 156,
-      downvotes: 12,
-      replies: 45,
-    },
-    timePosted: "2 hours ago",
-    tags: ["renewable-energy", "urban-development", "sustainability"],
-  };
+  useEffect(() => {
+    const fetchThread = async () => {
+      try {
+        const response = await getThread(Number(threadId));
+        setThread(response.data);
+      } catch (error) {}
+    };
+    fetchThread();
+  }, [threadId]);
 
   const replies = [
     {
@@ -51,7 +45,7 @@ What are your experiences with renewable energy initiatives in your cities?`,
         "Great points about solar panel integration! In our city, we've implemented a program that incentivizes building owners to install solar panels on rooftops. The results have been promising so far.",
       author: {
         name: "Sarah Johnson",
-        image: "/api/placeholder/40/40",
+        image: "https://github.com/shadcn.png",
         role: "Urban Planner",
       },
       stats: {
@@ -61,8 +55,20 @@ What are your experiences with renewable energy initiatives in your cities?`,
       timePosted: "1 hour ago",
       isVerified: true,
     },
-    // Add more replies as needed
   ];
+  console.log(thread?.replies);
+
+  const handleSubmitReply = async (e: React.FormEvent) => {
+    toast.success("You did it!");
+    e.preventDefault();
+    const reply = {
+      content: replyContent,
+      thread_id: Number(threadId),
+    };
+
+    const response = await replyOnThread(reply);
+    console.log("reply response", response);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -95,36 +101,43 @@ What are your experiences with renewable energy initiatives in your cities?`,
           className="bg-white rounded-lg shadow-sm p-6 mb-8"
         >
           <div className="flex items-start gap-4">
-            <Image
-              src={threadData.author.image}
-              alt={threadData.author.name}
-              className="w-10 h-10 rounded-full"
-            />
+            {thread?.user && (
+              <Image
+                src={thread.user.avatar || defaultAvatar}
+                alt={`${thread.user.name}'s avatar`}
+                height={40}
+                width={40}
+                className="rounded-full"
+              />
+            )}
             <div className="flex-grow">
               <div className="flex items-center gap-2 mb-1">
                 <h2 className="font-semibold text-gray-900">
-                  {threadData.author.name}
+                  {thread?.user?.name}
                 </h2>
                 <span className="text-sm text-gray-500">
-                  {threadData.author.role}
+                  {/* {threadData.author.role} */}
                 </span>
                 <span className="text-sm text-gray-400">·</span>
                 <span className="text-sm text-gray-500">
-                  {threadData.timePosted}
+                  {thread?.created_at &&
+                    formatDistanceToNow(new Date(thread.created_at), {
+                      addSuffix: true,
+                    })}
                 </span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">
-                {threadData.title}
+                {thread?.title}
               </h3>
               <div className="prose prose-sm max-w-none mb-4">
-                {threadData.content.split("\n\n").map((paragraph, index) => (
+                {thread?.content.split("\n\n").map((paragraph, index) => (
                   <p key={index} className="mb-4 text-gray-600">
                     {paragraph}
                   </p>
                 ))}
               </div>
               <div className="flex flex-wrap gap-2 mb-4">
-                {threadData.tags.map((tag) => (
+                {thread?.tags?.map((tag) => (
                   <span
                     key={tag}
                     className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm"
@@ -142,12 +155,12 @@ What are your experiences with renewable energy initiatives in your cities?`,
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-gray-500 hover:text-indigo-600"
+                  className="text-gray-500 hover:text-pink-600"
                 >
                   <ChevronUp className="h-4 w-4" />
                 </Button>
                 <span className="text-sm font-medium">
-                  {threadData.stats.upvotes}
+                  {thread?.stats?.upvotes ?? 0}
                 </span>
                 <Button
                   variant="ghost"
@@ -179,40 +192,45 @@ What are your experiences with renewable energy initiatives in your cities?`,
             animate={{ opacity: 1, height: "auto" }}
             className="bg-white rounded-lg shadow-sm p-6 mb-8"
           >
-            <div className="mb-4">
-              <div className="border rounded-lg overflow-hidden">
-                <div className="bg-gray-50 px-4 py-2 flex items-center justify-between border-b">
-                  <div className="flex gap-2">
+            <form onSubmit={handleSubmitReply}>
+              <div className="mb-4">
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="bg-gray-50 px-4 py-2 flex items-center justify-between border-b">
+                    <div className="flex gap-2">
+                      <Button variant="ghost" size="sm">
+                        B
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        I
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        U
+                      </Button>
+                    </div>
                     <Button variant="ghost" size="sm">
-                      B
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      I
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      U
+                      <Smile className="h-4 w-4" />
                     </Button>
                   </div>
-                  <Button variant="ghost" size="sm">
-                    <Smile className="h-4 w-4" />
-                  </Button>
+                  <textarea
+                    value={replyContent}
+                    onChange={(e) => setReplyContent(e.target.value)}
+                    placeholder="Write your reply..."
+                    className="w-full px-4 py-3 focus:outline-none min-h-[120px] resize-y"
+                  />
                 </div>
-                <textarea
-                  value={replyContent}
-                  onChange={(e) => setReplyContent(e.target.value)}
-                  placeholder="Write your reply..."
-                  className="w-full px-4 py-3 focus:outline-none min-h-[120px] resize-y"
-                />
               </div>
-            </div>
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowReplyBox(false)}>
-                Cancel
-              </Button>
-              <Button className="bg-indigo-600 hover:bg-indigo-700">
-                Post Reply
-              </Button>
-            </div>
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowReplyBox(false)}
+                >
+                  Cancel
+                </Button>
+                <Button className="bg-pink-600 hover:bg-pink-700">
+                  Post Reply
+                </Button>
+              </div>
+            </form>
           </motion.div>
         )}
 
@@ -220,7 +238,7 @@ What are your experiences with renewable energy initiatives in your cities?`,
         <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold text-gray-900">
-              {threadData.stats.replies} Replies
+              {thread?.stats?.replies ?? 0} Replies
             </h3>
             <select
               value={sortBy}
@@ -235,7 +253,7 @@ What are your experiences with renewable energy initiatives in your cities?`,
           </div>
 
           <div className="space-y-6">
-            {replies.map((reply) => (
+            {thread?.replies?.map((reply) => (
               <motion.div
                 key={reply.id}
                 initial={{ opacity: 0 }}
@@ -244,26 +262,31 @@ What are your experiences with renewable energy initiatives in your cities?`,
               >
                 <div className="flex items-start gap-4">
                   <Image
-                    src={reply.author.image}
-                    alt={reply.author.name}
-                    className="w-10 h-10 rounded-full"
+                    src={reply.user?.avatar || defaultAvatar}
+                    alt={`${reply.user?.name}'s avatar`}
+                    width={40}
+                    height={40}
+                    className="rounded-full"
                   />
                   <div className="flex-grow">
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className="font-semibold text-gray-900">
-                        {reply.author.name}
+                        {reply.user?.name}
                       </h4>
                       <span className="text-sm text-gray-500">
-                        {reply.author.role}
+                        {/* {reply.author.role} */}
                       </span>
-                      {reply.isVerified && (
+                      {/* {reply.isVerified && (
                         <span className="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">
                           Verified
                         </span>
-                      )}
+                      )} */}
                       <span className="text-sm text-gray-400">·</span>
                       <span className="text-sm text-gray-500">
-                        {reply.timePosted}
+                        {reply?.created_at &&
+                          formatDistanceToNow(new Date(reply.created_at), {
+                            addSuffix: true,
+                          })}
                       </span>
                     </div>
                     <p className="text-gray-600 mb-4">{reply.content}</p>
@@ -277,7 +300,7 @@ What are your experiences with renewable energy initiatives in your cities?`,
                           <ChevronUp className="h-4 w-4" />
                         </Button>
                         <span className="text-sm font-medium">
-                          {reply.stats.upvotes}
+                          {reply.stats?.upvotes ? reply.stats?.upvotes : 0}
                         </span>
                         <Button
                           variant="ghost"

@@ -1,4 +1,3 @@
-// axios client instance
 import axios from "axios";
 
 const axiosClient = axios.create({
@@ -8,7 +7,6 @@ const axiosClient = axios.create({
   },
 });
 
-// Function to set the token
 export function setToken(token: string) {
   if (token) {
     axiosClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -17,11 +15,9 @@ export function setToken(token: string) {
   }
 }
 
-// Add a request interceptor to add the token dynamically
 axiosClient.interceptors.request.use(
   (config) => {
-    // Check if token is set and add to the request if required
-    const token = localStorage.getItem("token"); // or sessionStorage if needed
+    const token = localStorage.getItem("token");
     if (token && !config.headers["Authorization"]) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -32,16 +28,13 @@ axiosClient.interceptors.request.use(
   }
 );
 
-// Optionally, handle response errors globally using interceptors
 axiosClient.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
-    // Handle specific errors like token expiration or unauthorized
     if (error.response && error.response.status === 401) {
-      // Handle token expiration or re-authentication logic
-      // For example: redirect to login or show a message
+      throw error.response;
     }
     return Promise.reject(error);
   }

@@ -1,14 +1,5 @@
-//hooks/useForum.ts
-import { useState, useEffect } from "react";
 import axiosClient from "../lib/axiosClient";
-
-interface Thread {
-  id: number;
-  title: string;
-  description: string;
-  created_at: string;
-  updated_at: string;
-}
+import { Reply, Thread } from "@/types/Thread";
 
 interface UseForum {
   threads: Thread[];
@@ -17,43 +8,44 @@ interface UseForum {
   createThread: (title: string, description: string) => Promise<Thread>;
 }
 
-export const useForum = (): UseForum => {
-  const [threads, setThreads] = useState<Thread[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export const fetchThreads = async () => {
+  try {
+    const response = await axiosClient.get<Thread[]>("/threads");
+    return response.data;
+  } catch (err: unknown) {
+    throw err;
+  } finally {
+    console.log("Exit execution");
+  }
+};
 
-  const fetchThreads = async () => {
-    setLoading(true);
-    try {
-      const response = await axiosClient.get<Thread[]>("/forum/threads");
-      setThreads(response.data);
-    } catch (err: any) {
-      setError("Failed to load forum threads");
-    } finally {
-      setLoading(false);
-    }
-  };
+export const createThread = async (data: Thread): Promise<Thread> => {
+  try {
+    const response = await axiosClient.post<Thread>("/threads", {
+      title: data.title,
+      category_id: data.category_id,
+      content: data.content,
+    });
+    return response.data;
+  } catch (err: unknown) {
+    throw err;
+  }
+};
 
-  const createThread = async (
-    title: string,
-    description: string
-  ): Promise<Thread> => {
-    try {
-      const response = await axiosClient.post<Thread>("/forum/threads", {
-        title,
-        description,
-      });
-      setThreads((prev) => [response.data, ...prev]);
-      return response.data;
-    } catch (err: any) {
-      setError("Failed to create thread");
-      throw err;
-    }
-  };
+export const getThread = async (id: number) => {
+  try {
+    const response = await axiosClient.get(`/threads/${id}`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 
-  useEffect(() => {
-    fetchThreads();
-  }, []);
-
-  return { threads, loading, error, createThread };
+export const replyOnThread = async (data: Reply) => {
+  try {
+    const response = await axiosClient.post("/replies", data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };

@@ -77,8 +77,8 @@ const HomePage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              Connect. Share. <span className="text-pink-600">Grow.</span>
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 font-serif">
+              CONNECT. SHARE. <span className="text-pink-600">GROW.</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8">
               Join the world most vibrant youth community platform where ideas

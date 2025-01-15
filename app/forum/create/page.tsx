@@ -1,49 +1,45 @@
 "use client";
-import React, { useState } from "react";
-import { TrendingUp, Hash, Users, BookmarkPlus, BarChart2 } from "lucide-react";
-
-interface Category {
-  id: string;
-  name: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-}
-
-// Interface representing the discussion form's data structure
-interface NewDiscussion {
-  title: string;
-  content: string;
-  category: string;
-  tags: string[];
-}
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createThread } from "@/hooks/useForum";
+import { getCategories } from "@/hooks/useCategory";
+import { Category } from "@/types/Category";
+import { Thread } from "@/types/Thread";
 
 // Page component for creating a new discussion
 export default function CreateDiscussionPage() {
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
-  const categories: Category[] = [
-    { id: "all", name: "All Topics", icon: Hash },
-    { id: "technology", name: "Technology", icon: BarChart2 },
-    { id: "health", name: "Health & Wellness", icon: Users },
-    { id: "education", name: "Education", icon: BookmarkPlus },
-    { id: "climate", name: "Climate Action", icon: TrendingUp },
-  ];
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await getCategories();
+        setCategories(response);
+      } catch (error) {
+        throw error;
+      }
+    };
+    fetchCategories();
+  }, []);
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newDiscussion: NewDiscussion = {
+    const newThread: Thread = {
       title,
       content,
-      category,
-      tags,
+      category_id: Number(category),
     };
-
-    // TODO: Implement your submission logic here
-    console.log(newDiscussion);
+    const response = await createThread(newThread);
+    if (response.id) {
+      router.push(`/forum/${response.id}`);
+    }
   };
 
   // Handle adding tags when Enter is pressed

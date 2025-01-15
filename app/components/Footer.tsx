@@ -1,6 +1,7 @@
 import React from "react";
 import { Github, Twitter, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const Footer = () => {
   const date = new Date().getFullYear();
@@ -20,28 +21,28 @@ const Footer = () => {
               <h4 className="font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2">
                 <li>
-                  <Button
-                    variant="link"
+                  <Link
+                    href="/about-us"
                     className="text-white hover:text-white p-0"
                   >
                     About Us
-                  </Button>
+                  </Link>
                 </li>
                 <li>
-                  <Button
-                    variant="link"
+                  <Link
+                    href="/community-guidelines"
                     className="text-white hover:text-white p-0"
                   >
                     Community Guidelines
-                  </Button>
+                  </Link>
                 </li>
                 <li>
-                  <Button
-                    variant="link"
+                  <Link
+                    href="/success-stories"
                     className="text-white hover:text-white p-0"
                   >
                     Success Stories
-                  </Button>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -49,53 +50,41 @@ const Footer = () => {
               <h4 className="font-semibold mb-4">Resources</h4>
               <ul className="space-y-2">
                 <li>
-                  <Button
-                    variant="link"
+                  <Link
+                    href="/help-center"
                     className="text-white hover:text-white p-0"
                   >
                     Help Center
-                  </Button>
+                  </Link>
                 </li>
                 <li>
-                  <Button
-                    variant="link"
+                  <Link
+                    href="/events-calender"
                     className="text-white hover:text-white p-0"
                   >
                     Events Calendar
-                  </Button>
+                  </Link>
                 </li>
                 <li>
-                  <Button
-                    variant="link"
+                  <Link
+                    href="/blog"
                     className="text-white hover:text-white p-0"
                   >
                     Blog
-                  </Button>
+                  </Link>
                 </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Connect With Us</h4>
               <div className="flex gap-4">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-white hover:text-white"
-                >
+                <Button variant="ghost" size="icon" className="text-whit">
                   <Twitter className="h-5 w-5" />
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-white hover:text-white"
-                >
+                <Button variant="ghost" size="icon" className="text-white">
                   <Instagram className="h-5 w-5" />
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-white hover:text-white"
-                >
+                <Button variant="ghost" size="icon" className="text-white ">
                   <Github className="h-5 w-5" />
                 </Button>
               </div>
