@@ -44,7 +44,7 @@ export const getThread = async (id: number) => {
 export const replyOnThread = async (data: Reply) => {
   try {
     const response = await axiosClient.post("/replies", data);
-    return response.data;
+    return response;
   } catch (error) {
     throw error;
   }

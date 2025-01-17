@@ -68,7 +68,7 @@ const ForumPage: React.FC = () => {
       {
         id: 1,
         author: "Jane Smith",
-        avatar: "https://github.com/shadcn.png",
+        avatar: "/avatar.jpg",
         content: "This is a fascinating perspective on renewable energy!",
         timeAgo: "1h ago",
         likes: 12,
@@ -96,7 +96,7 @@ const ForumPage: React.FC = () => {
       category: "technology",
       author: {
         name: "Alex Chen",
-        image: "https://github.com/shadcn.png",
+        image: "/avatar.jpg",
       },
       stats: {
         replies: 45,
@@ -115,7 +115,7 @@ const ForumPage: React.FC = () => {
       category: "health",
       author: {
         name: "Sarah Johnson",
-        image: "https://github.com/shadcn.png",
+        image: "/avatar.jpg",
       },
       stats: {
         replies: 72,
@@ -134,7 +134,7 @@ const ForumPage: React.FC = () => {
       category: "education",
       author: {
         name: "Prof. Michael Brown",
-        image: "https://github.com/shadcn.png",
+        image: "/avatar.jpg",
       },
       stats: {
         replies: 38,
@@ -162,7 +162,7 @@ const ForumPage: React.FC = () => {
       const newCommentObj = {
         id: comments[discussionId].length + 1,
         author: "Current User",
-        avatar: "https://github.com/shadcn.png",
+        avatar: "/avatar.jpg",
         content: newComment,
         timeAgo: "Just now",
         likes: 0,
@@ -367,16 +367,16 @@ const ForumPage: React.FC = () => {
                       <div className="space-y-4">
                         {comments[discussion.id].map((comment) => (
                           <div key={comment.id} className="flex space-x-3">
-                            <Image
-                              src={comment.avatar}
-                              alt={comment.author}
-                              width={32}
-                              height={32}
-                              className="rounded-full bg-gray-200"
-                            />
                             <div className="flex-1">
                               <div className="bg-gray-50 rounded-lg p-3">
-                                <div className="flex items-center justify-between">
+                                <div className="flex space-x-3">
+                                  <Image
+                                    src={comment.avatar}
+                                    alt={comment.author}
+                                    width={32}
+                                    height={32}
+                                    className="rounded-full bg-gray-200"
+                                  />
                                   <span className="font-medium">
                                     {comment.author}
                                   </span>
@@ -405,7 +405,7 @@ const ForumPage: React.FC = () => {
                       {/* Add Comment */}
                       <div className="mt-4 flex items-start space-x-3">
                         <Image
-                          src="https://github.com/shadcn.png"
+                          src="/avatar.jpg"
                           alt="Current user"
                           width={32}
                           height={32}

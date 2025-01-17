@@ -26,7 +26,7 @@ const DiscussionThread = () => {
   const [sortBy, setSortBy] = useState("top");
   const [thread, setThread] = useState<Thread | null>(null);
 
-  const defaultAvatar = "/avatar.jpg"; // Define a default avatar path
+  const defaultAvatar = "/avatar.jpg";
 
   useEffect(() => {
     const fetchThread = async () => {
@@ -43,15 +43,25 @@ const DiscussionThread = () => {
   console.log(thread?.replies);
 
   const handleSubmitReply = async (e: React.FormEvent) => {
-    toast.success("You did it!");
     e.preventDefault();
     const reply = {
       content: replyContent,
       thread_id: Number(threadId),
     };
-
     const response = await replyOnThread(reply);
-    console.log("reply response", response);
+    if (response.statusText === "Created") {
+      toast.success("Reply send successfully");
+      setReplyContent("");
+    } else {
+      toast.error("Unable to reply to thread");
+    }
+  };
+  const handleUpvote = async () => {
+    console.log("Upvote thread", thread?.id);
+  };
+
+  const handleDownvote = async () => {
+    console.log("Upvote thread", thread?.id);
   };
 
   return (
@@ -136,10 +146,14 @@ const DiscussionThread = () => {
           <div className="flex items-center justify-between pt-4 border-t">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1">
+                <span className="text-sm font-medium">
+                  {thread?.stats?.upvotes ?? 0}
+                </span>
                 <Button
                   variant="ghost"
                   size="sm"
                   className="text-gray-500 hover:text-pink-600"
+                  onClick={handleUpvote}
                 >
                   <ChevronUp className="h-4 w-4" />
                 </Button>
@@ -149,6 +163,7 @@ const DiscussionThread = () => {
                 <Button
                   variant="ghost"
                   size="sm"
+                  onClick={handleDownvote}
                   className="text-gray-500 hover:text-indigo-600"
                 >
                   <ChevronDown className="h-4 w-4" />
@@ -222,7 +237,7 @@ const DiscussionThread = () => {
         <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold text-gray-900">
-              {thread?.stats?.replies ?? 0} Replies
+              {thread?.replies?.length} Replies
             </h3>
             <select
               value={sortBy}

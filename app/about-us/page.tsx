@@ -9,7 +9,7 @@ const AboutUs = () => {
       name: "Sarah Johnson",
       role: "Founder & CEO",
       bio: "10+ years experience in community building",
-      avatar: "https://github.com/shadcn.png",
+      avatar: "/avatar.jpg",
       social: {
         twitter: "#",
         linkedin: "#",
@@ -20,7 +20,7 @@ const AboutUs = () => {
       name: "Michael Chen",
       role: "Lead Developer",
       bio: "Full-stack developer with expertise in React",
-      avatar: "https://github.com/shadcn.png",
+      avatar: "/avatar.jpg",
       social: {
         twitter: "#",
         linkedin: "#",
@@ -31,7 +31,7 @@ const AboutUs = () => {
       name: "Elena Rodriguez",
       role: "Community Manager",
       bio: "Passionate about building inclusive communities",
-      avatar: "https://github.com/shadcn.png",
+      avatar: "/avatar.jpg",
       social: {
         twitter: "#",
         linkedin: "#",

@@ -5,6 +5,7 @@ import { createThread } from "@/hooks/useForum";
 import { getCategories } from "@/hooks/useCategory";
 import { Category } from "@/types/Category";
 import { Thread } from "@/types/Thread";
+import toast, { ToastBar } from "react-hot-toast";
 
 // Page component for creating a new discussion
 export default function CreateDiscussionPage() {
@@ -38,6 +39,7 @@ export default function CreateDiscussionPage() {
     };
     const response = await createThread(newThread);
     if (response.id) {
+      toast.success("Thread successfully created!");
       router.push(`/forum/${response.id}`);
     }
   };

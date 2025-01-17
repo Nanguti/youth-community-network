@@ -30,14 +30,14 @@ export const useAuth = (): UseAuth => {
   ): Promise<LoginResponse> => {
     setLoading(true);
     try {
-      const response = await axiosClient.post<LoginResponse>("/auth/login", {
+      const response = await axiosClient.post<LoginResponse>("/login", {
         email,
         password,
       });
-      // Save token in localStorage or cookies
       localStorage.setItem("token", response.data.token);
       return response.data;
     } catch (err: any) {
+      console.error("Network or server error:", err.toJSON()); // Log error details
       setError(err.response?.data?.message || "Login failed");
       throw err;
     } finally {
@@ -52,7 +52,7 @@ export const useAuth = (): UseAuth => {
   ): Promise<SignupResponse> => {
     setLoading(true);
     try {
-      const response = await axiosClient.post<SignupResponse>("/auth/signup", {
+      const response = await axiosClient.post<SignupResponse>("/signup", {
         email,
         password,
         name,
