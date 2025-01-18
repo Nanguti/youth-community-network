@@ -8,7 +8,7 @@ import { SearchBar } from "../components/forum/SearchBar";
 import { DiscussionCard } from "../components/DiscussionCard";
 
 const ForumPage: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [comments, setComments] = useState<Record<number, Comment[]>>({
     1: [
@@ -116,7 +116,9 @@ const ForumPage: React.FC = () => {
 
   const filteredDiscussions = discussions.filter((discussion) => {
     const matchesCategory =
-      selectedCategory === "all" || discussion.category === selectedCategory;
+      selectedCategory === 1 ||
+      discussion.category ===
+        categories.find((cat) => cat.id === selectedCategory)?.name;
     const matchesSearch =
       searchQuery === "" ||
       discussion.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

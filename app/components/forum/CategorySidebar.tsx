@@ -2,8 +2,8 @@ import { Category } from "@/types/Thread";
 
 interface CategorySidebarProps {
   categories: Category[];
-  selectedCategory: string;
-  onCategorySelect: (categoryId: string) => void;
+  selectedCategory: number; // Changed from string to number to match Category.id
+  onCategorySelect: (categoryId: number) => void; // Changed to accept number
 }
 
 const CategorySidebar = ({
@@ -22,7 +22,7 @@ const CategorySidebar = ({
               return (
                 <button
                   key={category.id}
-                  onClick={() => onCategorySelect(category.id)}
+                  onClick={() => category.id && onCategorySelect(category.id)} // Added null check
                   className={`w-full flex items-center px-4 py-2 text-sm rounded-lg
                     transition-colors ${
                       selectedCategory === category.id
