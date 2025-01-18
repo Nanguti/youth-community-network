@@ -1,5 +1,5 @@
 import axiosClient from "../lib/axiosClient";
-import { Reply, Thread } from "@/types/Thread";
+import { CreateThreadRequest, Reply, Thread } from "@/types/Thread";
 
 interface UseForum {
   threads: Thread[];
@@ -19,9 +19,11 @@ export const fetchThreads = async () => {
   }
 };
 
-export const createThread = async (data: Thread): Promise<Thread> => {
+export const createThread = async (
+  data: CreateThreadRequest
+): Promise<CreateThreadRequest> => {
   try {
-    const response = await axiosClient.post<Thread>("/threads", {
+    const response = await axiosClient.post<CreateThreadRequest>("/threads", {
       title: data.title,
       category_id: data.category_id,
       content: data.content,

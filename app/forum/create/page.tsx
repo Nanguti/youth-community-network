@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { createThread } from "@/hooks/useForum";
 import { getCategories } from "@/hooks/useCategory";
 import { Category } from "@/types/Category";
-import { Thread } from "@/types/Thread";
+import { CreateThreadRequest, Thread } from "@/types/Thread";
 import toast from "react-hot-toast";
 
 // Page component for creating a new discussion
@@ -32,7 +32,7 @@ export default function CreateDiscussionPage() {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newThread: Thread = {
+    const newThread: CreateThreadRequest = {
       title,
       content,
       category_id: Number(category),
