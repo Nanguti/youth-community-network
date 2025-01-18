@@ -1,0 +1,81 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "content": "This is a sample post!",
+      "privacy": "public",
+      "reactions": {
+        "like": { "type": "like", "count": 3, "users": [1, 2, 3] },
+        "love": { "type": "love", "count": 1, "users": [4] }
+      }
+    },
+    {
+      "id": 2,
+      "content": "This is another post.",
+      "privacy": "friends",
+      "reactions": {
+        "like": { "type": "like", "count": 5, "users": [1, 3, 4, 5, 6] }
+      }
+    }
+  ],
+  "comments": {
+    "1": [
+      {
+        "id": 1,
+        "postId": 1,
+        "author": { "id": "1", "name": "John Doe", "image": "/avatar.jpg" },
+        "content": "Great post!",
+        "timeAgo": "2 hours ago",
+        "likes": 3,
+        "replies": [
+          {
+            "id": 2,
+            "author": {
+              "id": "2",
+              "name": "Jane Smith",
+              "image": "/avatar.jpg"
+            },
+            "content": "I agree!",
+            "timeAgo": "1 hour ago",
+            "likes": 1
+          }
+        ],
+        "mentions": []
+      }
+    ],
+    "2": [
+      {
+        "id": 3,
+        "postId": 2,
+        "author": {
+          "id": "3",
+          "name": "Alice Johnson",
+          "image": "/avatar.jpg"
+        },
+        "content": "Nice to see this!",
+        "timeAgo": "30 minutes ago",
+        "likes": 2,
+        "replies": [],
+        "mentions": []
+      }
+    ]
+  },
+  "notifications": [
+    {
+      "id": 1,
+      "type": "like",
+      "read": false,
+      "timeAgo": "Just now",
+      "actorId": 1,
+      "targetId": 1
+    },
+    {
+      "id": 2,
+      "type": "comment",
+      "read": true,
+      "timeAgo": "5 minutes ago",
+      "actorId": 3,
+      "targetId": 2
+    }
+  ]
+}
