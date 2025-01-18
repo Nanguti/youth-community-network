@@ -112,6 +112,7 @@ const ForumPage: React.FC = () => {
       return { ...prev, [discussionId]: newReactions };
     });
   };
+  console.log("Reactions", reactions);
 
   const filteredDiscussions = discussions.filter((discussion) => {
     const matchesCategory =
