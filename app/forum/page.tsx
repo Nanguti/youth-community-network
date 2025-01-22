@@ -6,41 +6,19 @@ import Header from "../components/forum/Header";
 import CategorySidebar from "../components/forum/CategorySidebar";
 import { SearchBar } from "../components/forum/SearchBar";
 import { DiscussionCard } from "../components/DiscussionCard";
+import { createThread } from "@/hooks/useForum";
+import toast from "react-hot-toast";
+
+interface ThreadFormData {
+  title: string;
+  content: string;
+  category_id: number;
+}
 
 const ForumPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [comments, setComments] = useState<Record<number, Comment[]>>({
-    1: [
-      {
-        id: 1,
-        author: "Jane Smith",
-        avatar: "/avatar.jpg",
-        content: "This is a fascinating perspective on renewable energy!",
-        timeAgo: "1h ago",
-        likes: 12,
-        replies: [],
-      },
-    ],
-    2: [],
-    3: [],
-  });
-  const [newComment, setNewComment] = useState<string>("");
-  const [reactions, setReactions] = useState<Record<number, Reaction[]>>({
-    1: [],
-    2: [],
-    3: [],
-  });
-
-  const categories: Category[] = [
-    { id: 1, name: "All Topics", icon: Hash, parent_id: 0 },
-    { id: 2, name: "Technology", icon: BarChart2, parent_id: 0 },
-    { id: 3, name: "Health & Wellness", icon: Users, parent_id: 0 },
-    { id: 4, name: "Education", icon: BookmarkPlus, parent_id: 0 },
-    { id: 5, name: "Climate Action", icon: TrendingUp, parent_id: 0 },
-  ];
-
-  const discussions: Discussion[] = [
+  const [discussions, setDiscussions] = useState<Discussion[]>([
     {
       id: 1,
       title: "The Future of Renewable Energy in Urban Areas",
@@ -80,7 +58,64 @@ const ForumPage: React.FC = () => {
       isHot: false,
       reactions: [],
     },
+  ]);
+
+  const [comments, setComments] = useState<Record<number, Comment[]>>({});
+
+  const [newComment, setNewComment] = useState<string>("");
+  const [reactions, setReactions] = useState<Record<number, Reaction[]>>({});
+
+  const categories: Category[] = [
+    { id: 1, name: "All Topics", icon: Hash, parent_id: 0 },
+    { id: 2, name: "Technology", icon: BarChart2, parent_id: 0 },
+    { id: 3, name: "Health & Wellness", icon: Users, parent_id: 0 },
+    { id: 4, name: "Education", icon: BookmarkPlus, parent_id: 0 },
+    { id: 5, name: "Climate Action", icon: TrendingUp, parent_id: 0 },
   ];
+
+  const handleCreateThread = async (
+    threadData: ThreadFormData
+  ): Promise<void> => {
+    try {
+      // Wait for the API response
+      const response = await createThread(threadData);
+      console.log("log response here->", response);
+
+      // Make sure the response contains the necessary data
+      if (!response) {
+        throw new Error("Invalid response from server");
+      }
+
+      const category = categories.find(
+        (cat) => cat.id === threadData.category_id
+      );
+
+      const newDiscussion: Discussion = {
+        id: response.id || Date.now(),
+        title: threadData.title,
+        preview: threadData.content,
+        category: category?.name.toLowerCase() || "all",
+        author: { name: "Current User", image: "/avatar.jpg" },
+        stats: { replies: 0, views: 0, likes: 0 },
+        tags: [],
+        timeAgo: "Just now",
+        isHot: false,
+        reactions: [],
+      };
+
+      setDiscussions((prev) => [newDiscussion, ...prev]);
+      if (newDiscussion.id !== undefined) {
+        setComments((prev) => ({ ...prev, [newDiscussion.id!]: [] }));
+        setReactions((prev) => ({ ...prev, [newDiscussion.id!]: [] }));
+      }
+
+      // Show success message after everything is updated
+      toast.success("Thread created successfully!");
+    } catch (error) {
+      console.error("Error creating thread:", error);
+      toast.error("Failed to create thread. Please try again.");
+    }
+  };
 
   const handleAddComment = (discussionId: number) => {
     if (newComment.trim()) {
@@ -102,23 +137,24 @@ const ForumPage: React.FC = () => {
     }
   };
 
-  const handleReaction = (discussionId: number, reaction: string) => {
+  const handleReaction = (discussionId: number, reaction: string | number) => {
     setReactions((prev) => {
       const existingReactions = prev[discussionId] || [];
       const newReactions: Reaction[] = [
         ...existingReactions,
-        { type: reaction, userId: "currentUser" },
+        { type: reaction.toString(), userId: "currentUser" },
       ];
       return { ...prev, [discussionId]: newReactions };
     });
   };
-  console.log("Reactions", reactions);
 
   const filteredDiscussions = discussions.filter((discussion) => {
     const matchesCategory =
       selectedCategory === 1 ||
       discussion.category ===
-        categories.find((cat) => cat.id === selectedCategory)?.name;
+        categories
+          .find((cat) => cat.id === selectedCategory)
+          ?.name.toLowerCase();
     const matchesSearch =
       searchQuery === "" ||
       discussion.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -128,7 +164,7 @@ const ForumPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <Header onCreateThread={handleCreateThread} categories={categories} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-12 gap-8">
@@ -144,16 +180,23 @@ const ForumPage: React.FC = () => {
               onSearchChange={setSearchQuery}
             />
 
-            <div className="space-y-4">
+            <div className="space-y-4 pb-32">
               {filteredDiscussions.map((discussion) => (
                 <DiscussionCard
                   key={discussion.id}
                   discussion={discussion}
                   comments={comments[discussion.id] || []}
+                  reactions={
+                    discussion.id !== undefined
+                      ? reactions[discussion.id] || []
+                      : []
+                  }
                   newComment={newComment}
                   onNewCommentChange={setNewComment}
-                  onAddComment={handleAddComment}
-                  onReaction={handleReaction}
+                  onAddComment={() => handleAddComment(discussion.id)}
+                  onReaction={(reaction) =>
+                    handleReaction(discussion.id, reaction)
+                  }
                 />
               ))}
             </div>

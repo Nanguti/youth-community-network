@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Comment, Discussion } from "@/types/Thread"; // Import Comment from our types
+import { Comment, Discussion, Reaction } from "@/types/Thread"; // Import Comment from our types
 import { Eye, Heart, MessageCircle, Share2, ThumbsUp } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -7,7 +7,8 @@ import { CommentSection } from "./forum/CommentSection";
 
 interface DiscussionCardProps {
   discussion: Discussion;
-  comments: Comment[]; // Using our custom Comment type
+  comments: Comment[];
+  reactions: Reaction[];
   newComment: string;
   onNewCommentChange: (comment: string) => void;
   onAddComment: (discussionId: number) => void;
