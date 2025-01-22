@@ -1,11 +1,5 @@
 "use client";
-import {
-  Category,
-  Comment,
-  CreateCommentResponse,
-  Discussion,
-  Reaction,
-} from "@/types/Thread";
+import { Category, Comment, Discussion, Reaction } from "@/types/Thread";
 import { BarChart2, BookmarkPlus, Hash, TrendingUp, Users } from "lucide-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -19,7 +13,6 @@ import {
   createComment,
 } from "@/hooks/useForum";
 import toast from "react-hot-toast";
-import axiosClient from "@/lib/axiosClient";
 
 interface ThreadFormData {
   title: string;
