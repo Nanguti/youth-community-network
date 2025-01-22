@@ -1,5 +1,11 @@
 import axiosClient from "../lib/axiosClient";
-import { CreateThreadRequest, Reply, Thread } from "@/types/Thread";
+import {
+  CreateCommentResponse,
+  CreateThreadRequest,
+  Reply,
+  Thread,
+  ThreadResponse,
+} from "@/types/Thread";
 
 interface UseForum {
   threads: Thread[];
@@ -8,14 +14,18 @@ interface UseForum {
   createThread: (title: string, description: string) => Promise<Thread>;
 }
 
-export const fetchThreads = async () => {
+interface ThreadsResponse {
+  data: ThreadResponse[];
+  current_page: number;
+  total: number;
+}
+
+export const fetchThreads = async (): Promise<ThreadsResponse> => {
   try {
-    const response = await axiosClient.get<Thread[]>("/threads");
+    const response = await axiosClient.get<ThreadsResponse>("/threads");
     return response.data;
-  } catch (err: unknown) {
-    throw err;
-  } finally {
-    console.log("Exit execution");
+  } catch (error) {
+    throw new Error("Failed to fetch threads");
   }
 };
 
@@ -49,5 +59,30 @@ export const replyOnThread = async (data: Reply) => {
     return response;
   } catch (error) {
     throw error;
+  }
+};
+
+export interface CreateCommentRequest {
+  content: string;
+  thread_id: number;
+  parent_id?: number | null;
+}
+
+export const createComment = async (
+  data: CreateCommentRequest
+): Promise<CreateCommentResponse> => {
+  try {
+    const response = await axiosClient.post<CreateCommentResponse>(
+      "/comments",
+      {
+        content: data.content,
+        thread_id: data.thread_id,
+        parent_id: data.parent_id || null,
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to create comment");
   }
 };

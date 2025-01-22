@@ -1,13 +1,25 @@
 "use client";
-import { Category, Comment, Discussion, Reaction } from "@/types/Thread";
+import {
+  Category,
+  Comment,
+  CreateCommentResponse,
+  Discussion,
+  Reaction,
+} from "@/types/Thread";
 import { BarChart2, BookmarkPlus, Hash, TrendingUp, Users } from "lucide-react";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import Header from "../components/forum/Header";
 import CategorySidebar from "../components/forum/CategorySidebar";
 import { SearchBar } from "../components/forum/SearchBar";
 import { DiscussionCard } from "../components/DiscussionCard";
-import { createThread } from "@/hooks/useForum";
+import {
+  createThread,
+  fetchThreads as getThreads,
+  createComment,
+} from "@/hooks/useForum";
 import toast from "react-hot-toast";
+import axiosClient from "@/lib/axiosClient";
 
 interface ThreadFormData {
   title: string;
@@ -15,55 +27,39 @@ interface ThreadFormData {
   category_id: number;
 }
 
+interface ThreadResponse {
+  id: number;
+  title: string;
+  content: string;
+  user: {
+    id: number;
+    name: string;
+    avatar: string | null;
+  };
+  category: {
+    id: number;
+    name: string;
+    icon: string;
+  };
+  created_at: string;
+  is_pinned: boolean;
+  is_locked: boolean;
+}
+
+interface ThreadsResponse {
+  data: ThreadResponse[];
+  current_page: number;
+  total: number;
+}
+
 const ForumPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [discussions, setDiscussions] = useState<Discussion[]>([
-    {
-      id: 1,
-      title: "The Future of Renewable Energy in Urban Areas",
-      preview:
-        "Let's discuss innovative solutions for implementing renewable energy in cities.",
-      category: "technology",
-      author: { name: "Alex Chen", image: "/avatar.jpg" },
-      stats: { replies: 45, views: 1200, likes: 89 },
-      tags: ["renewable", "urban", "innovation"],
-      timeAgo: "2h ago",
-      isHot: true,
-      reactions: [],
-    },
-    {
-      id: 2,
-      title: "Mental Health in the Digital Age",
-      preview:
-        "How can we maintain healthy digital habits while staying connected?",
-      category: "health",
-      author: { name: "Sarah Johnson", image: "/avatar.jpg" },
-      stats: { replies: 72, views: 2100, likes: 154 },
-      tags: ["mentalhealth", "wellness", "digital"],
-      timeAgo: "4h ago",
-      isHot: true,
-      reactions: [],
-    },
-    {
-      id: 3,
-      title: "Online Learning: Best Practices for Educators",
-      preview:
-        "Exploring effective methods for engaging students in virtual classrooms.",
-      category: "education",
-      author: { name: "Prof. Michael Brown", image: "/avatar.jpg" },
-      stats: { replies: 38, views: 890, likes: 67 },
-      tags: ["education", "online", "teaching"],
-      timeAgo: "6h ago",
-      isHot: false,
-      reactions: [],
-    },
-  ]);
-
-  const [comments, setComments] = useState<Record<number, Comment[]>>({});
-
+  const [discussions, setDiscussions] = useState<Discussion[]>([]);
+  const [comments, setComments] = useState<Record<string, Comment[]>>({});
   const [newComment, setNewComment] = useState<string>("");
-  const [reactions, setReactions] = useState<Record<number, Reaction[]>>({});
+  const [reactions, setReactions] = useState<Record<string, Reaction[]>>({});
+  const [loading, setLoading] = useState(true);
 
   const categories: Category[] = [
     { id: 1, name: "All Topics", icon: Hash, parent_id: 0 },
@@ -73,43 +69,66 @@ const ForumPage: React.FC = () => {
     { id: 5, name: "Climate Action", icon: TrendingUp, parent_id: 0 },
   ];
 
+  useEffect(() => {
+    fetchThreads();
+  }, []);
+
+  const fetchThreads = async () => {
+    try {
+      setLoading(true);
+      const response: ThreadsResponse = await getThreads();
+      const formattedDiscussions: Discussion[] = response.data.map(
+        (thread: ThreadResponse) => ({
+          id: thread.id,
+          title: thread.title,
+          preview: thread.content,
+          category: thread.category.name.toLowerCase(),
+          author: {
+            name: thread.user.name,
+            image: thread.user.avatar || "/avatar.jpg",
+          },
+          stats: {
+            replies: 0,
+            views: 0,
+            likes: 0,
+          },
+          tags: [],
+          timeAgo: new Date(thread.created_at).toLocaleDateString(),
+          isHot: thread.is_pinned,
+          reactions: [],
+        })
+      );
+
+      setDiscussions(formattedDiscussions);
+
+      const initialComments: Record<string, Comment[]> = {};
+      const initialReactions: Record<string, Reaction[]> = {};
+
+      formattedDiscussions.forEach((discussion) => {
+        initialComments[String(discussion.id)] = [];
+        initialReactions[String(discussion.id)] = [];
+      });
+
+      setComments(initialComments);
+      setReactions(initialReactions);
+    } catch (error) {
+      console.error("Error fetching threads:", error);
+      toast.error("Failed to load discussions");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCreateThread = async (
     threadData: ThreadFormData
   ): Promise<void> => {
     try {
-      // Wait for the API response
       const response = await createThread(threadData);
-      console.log("log response here->", response);
-
-      // Make sure the response contains the necessary data
       if (!response) {
         throw new Error("Invalid response from server");
       }
 
-      const category = categories.find(
-        (cat) => cat.id === threadData.category_id
-      );
-
-      const newDiscussion: Discussion = {
-        id: response.id || Date.now(),
-        title: threadData.title,
-        preview: threadData.content,
-        category: category?.name.toLowerCase() || "all",
-        author: { name: "Current User", image: "/avatar.jpg" },
-        stats: { replies: 0, views: 0, likes: 0 },
-        tags: [],
-        timeAgo: "Just now",
-        isHot: false,
-        reactions: [],
-      };
-
-      setDiscussions((prev) => [newDiscussion, ...prev]);
-      if (newDiscussion.id !== undefined) {
-        setComments((prev) => ({ ...prev, [newDiscussion.id!]: [] }));
-        setReactions((prev) => ({ ...prev, [newDiscussion.id!]: [] }));
-      }
-
-      // Show success message after everything is updated
+      await fetchThreads(); // Refresh the threads list
       toast.success("Thread created successfully!");
     } catch (error) {
       console.error("Error creating thread:", error);
@@ -117,27 +136,53 @@ const ForumPage: React.FC = () => {
     }
   };
 
-  const handleAddComment = (discussionId: number) => {
+  const handleAddComment = async (discussionId: number) => {
     if (newComment.trim()) {
-      const newCommentObj: Comment = {
-        id: (comments[discussionId]?.length || 0) + 1,
-        author: "Current User",
-        avatar: "/avatar.jpg",
-        content: newComment,
-        timeAgo: "Just now",
-        likes: 0,
-        replies: [],
-      };
+      try {
+        const data = await createComment({
+          content: newComment,
+          thread_id: discussionId,
+        });
 
-      setComments((prev) => ({
-        ...prev,
-        [discussionId]: [...(prev[discussionId] || []), newCommentObj],
-      }));
-      setNewComment("");
+        const newCommentObj: Comment = {
+          id: data.id,
+          content: data.content,
+          author: data.user?.name || "Current User",
+          avatar: data.user?.avatar || "/avatar.jpg",
+          timeAgo: "Just now",
+          likes: 0,
+          replies: [],
+          user: {
+            name: data.user?.name || "Current User",
+            avatar: data.user?.avatar || null,
+          },
+        };
+
+        setComments((prev) => ({
+          ...prev,
+          [String(discussionId)]: [
+            ...(prev[String(discussionId)] || []),
+            newCommentObj,
+          ],
+        }));
+        setNewComment("");
+        toast.success("Comment added successfully!");
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(
+            "Error adding comment:",
+            error.response?.data || error.message
+          );
+          toast.error(error.response?.data?.message || "Failed to add comment");
+        } else {
+          console.error("Error adding comment:", error);
+          toast.error("Failed to add comment");
+        }
+      }
     }
   };
 
-  const handleReaction = (discussionId: number, reaction: string | number) => {
+  const handleReaction = (discussionId: string, reaction: string | number) => {
     setReactions((prev) => {
       const existingReactions = prev[discussionId] || [];
       const newReactions: Reaction[] = [
@@ -162,6 +207,14 @@ const ForumPage: React.FC = () => {
     return matchesCategory && matchesSearch;
   });
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header onCreateThread={handleCreateThread} categories={categories} />
@@ -185,17 +238,17 @@ const ForumPage: React.FC = () => {
                 <DiscussionCard
                   key={discussion.id}
                   discussion={discussion}
-                  comments={comments[discussion.id] || []}
+                  comments={comments[String(discussion.id)] || []}
                   reactions={
                     discussion.id !== undefined
-                      ? reactions[discussion.id] || []
+                      ? reactions[String(discussion.id)] || []
                       : []
                   }
                   newComment={newComment}
                   onNewCommentChange={setNewComment}
                   onAddComment={() => handleAddComment(discussion.id)}
                   onReaction={(reaction) =>
-                    handleReaction(discussion.id, reaction)
+                    handleReaction(String(discussion.id), reaction)
                   }
                 />
               ))}

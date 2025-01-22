@@ -16,14 +16,31 @@ export interface Category {
   updated_at?: string | null;
 }
 
+export interface CreateCommentRequest {
+  content: string;
+  thread_id: number;
+}
+
 export interface Comment {
-  id?: number;
+  id: number;
+  content: string;
   author: string;
   avatar: string;
-  content: string;
   timeAgo: string;
   likes: number;
   replies: Comment[];
+  user: {
+    name: string;
+    avatar: string | null;
+  };
+}
+export interface CreateCommentResponse {
+  id: number;
+  content: string;
+  user?: {
+    name: string;
+    avatar: string | null;
+  };
 }
 
 export interface Discussion {
@@ -109,4 +126,23 @@ export interface CreateThreadRequest {
   title: string;
   content: string;
   category_id: number;
+}
+
+export interface ThreadResponse {
+  id: number;
+  title: string;
+  content: string;
+  user: {
+    id: number;
+    name: string;
+    avatar: string | null;
+  };
+  category: {
+    id: number;
+    name: string;
+    icon: string;
+  };
+  created_at: string;
+  is_pinned: boolean;
+  is_locked: boolean;
 }

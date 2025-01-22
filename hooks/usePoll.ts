@@ -1,57 +1,118 @@
-import { useState, useEffect } from "react";
-import axiosClient from "../lib/axiosClient";
+import { useState, useCallback } from "react";
+import { Poll, CreatePollInput, UpdatePollInput } from "@/interfaces/poll";
+import axiosClient from "@/lib/axiosClient";
+import { AxiosError } from "axios";
 
-interface Poll {
-  id: number;
-  question: string;
-  options: string[];
-  responses: number[];
-}
-
-interface UsePoll {
-  polls: Poll[];
-  loading: boolean;
-  error: string | null;
-  createPoll: (question: string, options: string[]) => Promise<Poll>;
-}
-
-export const usePoll = (): UsePoll => {
+export const usePoll = () => {
   const [polls, setPolls] = useState<Poll[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchPolls = async () => {
-    setLoading(true);
+  const handleError = (err: unknown) => {
+    if (err instanceof AxiosError) {
+      return err.response?.data?.message || err.message;
+    }
+    return "An unexpected error occurred";
+  };
+
+  const fetchPolls = useCallback(async () => {
     try {
-      const response = await axiosClient.get<Poll[]>("/polls");
-      setPolls(response.data);
-    } catch (err: any) {
-      setError("Failed to load polls");
+      setLoading(true);
+      setError(null);
+      const { data } = await axiosClient.get<Poll[]>("/polls");
+      // Ensure data is an array
+      setPolls(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setError(handleError(err));
+      setPolls([]); // Reset polls on error
     } finally {
       setLoading(false);
     }
-  };
-
-  const createPoll = async (
-    question: string,
-    options: string[]
-  ): Promise<Poll> => {
-    try {
-      const response = await axiosClient.post<Poll>("/polls", {
-        question,
-        options,
-      });
-      setPolls((prev) => [response.data, ...prev]);
-      return response.data;
-    } catch (err: any) {
-      setError("Failed to create poll");
-      throw err;
-    }
-  };
-
-  useEffect(() => {
-    fetchPolls();
   }, []);
 
-  return { polls, loading, error, createPoll };
+  const createPoll = useCallback(async (pollData: CreatePollInput) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const { data: newPoll } = await axiosClient.post<Poll>(
+        "/polls",
+        pollData
+      );
+      setPolls((prev) => [...prev, newPoll]);
+      return newPoll;
+    } catch (err) {
+      const errorMessage = handleError(err);
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const updatePoll = useCallback(async (pollData: UpdatePollInput) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const { data: updatedPoll } = await axiosClient.put<Poll>(
+        `/polls/${pollData.id}`,
+        pollData
+      );
+      setPolls((prev) =>
+        prev.map((poll) => (poll.id === updatedPoll.id ? updatedPoll : poll))
+      );
+      return updatedPoll;
+    } catch (err) {
+      const errorMessage = handleError(err);
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const deletePoll = useCallback(async (pollId: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      await axiosClient.delete(`/polls/${pollId}`);
+      setPolls((prev) => prev.filter((poll) => poll.id !== pollId));
+    } catch (err) {
+      const errorMessage = handleError(err);
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const votePoll = useCallback(async (pollId: string, optionId: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const { data: updatedPoll } = await axiosClient.post<Poll>(
+        `/polls/${pollId}/vote`,
+        { optionId }
+      );
+      setPolls((prev) =>
+        prev.map((poll) => (poll.id === updatedPoll.id ? updatedPoll : poll))
+      );
+    } catch (err) {
+      const errorMessage = handleError(err);
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return {
+    polls,
+    loading,
+    error,
+    fetchPolls,
+    createPoll,
+    updatePoll,
+    deletePoll,
+    votePoll,
+  };
 };

@@ -22,11 +22,11 @@ const CategorySidebar = ({
               return (
                 <button
                   key={category.id}
-                  onClick={() => category.id && onCategorySelect(category.id)} // Added null check
+                  onClick={() => category.id && onCategorySelect(category.id)}
                   className={`w-full flex items-center px-4 py-2 text-sm rounded-lg
                     transition-colors ${
                       selectedCategory === category.id
-                        ? "bg-indigo-50 text-indigo-600"
+                        ? "bg-indigo-50 text-pink-700"
                         : "text-gray-600 hover:bg-gray-50"
                     }`}
                 >
