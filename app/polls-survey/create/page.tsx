@@ -3,23 +3,23 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { BarChart2, BookmarkPlus, Hash, TrendingUp, Users } from "lucide-react";
-import PollForm from "@/app/components/PollForm";
 import { usePoll } from "@/hooks/usePoll";
 import { CreatePollInput, UpdatePollInput } from "@/interfaces/poll";
+import PollForm from "@/app/components/polls/PollForm";
 
 // Interface for the poll data
-interface PollData {
-  title: string;
-  description: string;
-  category: string;
-  options: string[];
-  settings: {
-    allowMultipleVotes: boolean;
-    showResultsBeforeVoting: boolean;
-    endDate: string;
-    endTime: string;
-  };
-}
+// interface PollData {
+//   title: string;
+//   description: string;
+//   category: string;
+//   options: string[];
+//   settings: {
+//     allowMultipleVotes: boolean;
+//     showResultsBeforeVoting: boolean;
+//     endDate: string;
+//     endTime: string;
+//   };
+// }
 
 const CreatePollPage = () => {
   const router = useRouter();
